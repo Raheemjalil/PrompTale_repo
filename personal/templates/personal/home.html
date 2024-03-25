@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-body">
+    <h2> Trending Now</h2>
+    <div id="container" class="scrollmenu"></div>
+    <h2>Newly added</h2>
+    <div id="container2" class="scrollmenu"></div>
+    
+</div>
+
+<style>
+.main-body {
+    background-color: white;
+    margin-top: 100px;
+    display: block;
+}
+.main-body h2 {
+    margin: 25px;
+}
+.scrollmenu {
+
+    width: 100%;
+    height: fit-content;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide the default scrollbar for Firefox */
+    scroll-snap-type: x mandatory; /* Enable scroll snapping */
+    user-select: none; /* Disable text selection while dragging */
+}
+/*to hide the scrollbars*/
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
+.flip-card {
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 250px;
+  height: 300px;
+  margin: 25px;
+  border: none;
+  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  display: inline-block;
+}
+
+/* This container is needed to position the front and back side */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+  background-color: white;
+  color: black;
+}
+
+/* Style the back side */
+.flip-card-back {
+  background-color: dodgerblue;
+  color: white;
+  transform: rotateY(180deg);
+}
+.flip-card-back p {
+    white-space: pre-wrap; /* Allow line breaks */
+    word-wrap: break-word; /* Allow long words to wrap */
+}
+</style>
+
+<script>
+    // Array of members
+var Trending = [
+    { name: "A Wild Night", profession: "Author: Ahmed", description: "A story of a man crossing a jungle on the darkest night of the year." },
+    { name: "Jane Smith", profession: "Software Developer", description: "She's amazing at coding" },
+    { name: "Michael Johnson", profession: "Data Scientist", description: "Brilliant with data analysis" },
+    { name: "Emily Williams", profession: "Graphic Designer", description: "Creates beautiful designs" },
+    { name: "David Brown", profession: "Marketing Manager", description: "Great at promoting products" },
+    { name: "Sarah Davis", profession: "Teacher", description: "Passionate about education" }
+];
+var Newly = [
+    { name: "A Wild Night", profession: "Author: Ahmed", description: "A story of a man crossing a jungle on the darkest night of the year." },
+    { name: "Jane Smith", profession: "Software Developer", description: "She's amazing at coding" },
+    { name: "Michael Johnson", profession: "Data Scientist", description: "Brilliant with data analysis" },
+    { name: "Emily Williams", profession: "Graphic Designer", description: "Creates beautiful designs" },
+    { name: "David Brown", profession: "Marketing Manager", description: "Great at promoting products" },
+    { name: "Sarah Davis", profession: "Teacher", description: "Passionate about education" }
+];
+
+// Create container
+var container = document.getElementById("container");
+var container2 = document.getElementById("container2");
+
+// Loop through members array and create flip cards
+Trending.forEach(function(member) {
+    // Create flip card elements
+    var flipCard = document.createElement("div");
+    flipCard.classList.add("flip-card");
+    var flipCardInner = document.createElement("div");
+    flipCardInner.classList.add("flip-card-inner");
+    var flipCardFront = document.createElement("div");
+    flipCardFront.classList.add("flip-card-front");
+    //var imgAvatar = document.createElement("img");
+    //imgAvatar.src = "img_avatar.png";
+    //imgAvatar.alt = "Avatar";
+    //imgAvatar.style.width = "300px";
+    //imgAvatar.style.height = "300px";
+    var flipCardBack = document.createElement("div");
+    flipCardBack.classList.add("flip-card-back");
+    var h1 = document.createElement("h1");
+    h1.textContent = member.name;
+    var p1 = document.createElement("p");
+    p1.textContent = member.profession;
+    var p2 = document.createElement("p");
+    p2.textContent = member.description;
+    p2.style.margin = '10px'
+    // Append elements to flip card
+    //flipCardFront.appendChild(imgAvatar);
+    flipCardBack.appendChild(h1);
+    flipCardBack.appendChild(p1);
+    flipCardBack.appendChild(p2);
+    flipCardInner.appendChild(flipCardFront);
+    flipCardInner.appendChild(flipCardBack);
+    flipCard.appendChild(flipCardInner);
+    // Append flip card to container
+    container.appendChild(flipCard);
+});
+
+Newly.forEach(function(member) {
+    // Create flip card elements
+    var flipCard = document.createElement("div");
+    flipCard.classList.add("flip-card");
+    var flipCardInner = document.createElement("div");
+    flipCardInner.classList.add("flip-card-inner");
+    var flipCardFront = document.createElement("div");
+    flipCardFront.classList.add("flip-card-front");
+    //var imgAvatar = document.createElement("img");
+    //imgAvatar.src = "img_avatar.png";
+    //imgAvatar.alt = "Avatar";
+    //imgAvatar.style.width = "300px";
+    //imgAvatar.style.height = "300px";
+    var flipCardBack = document.createElement("div");
+    flipCardBack.classList.add("flip-card-back");
+    var h1 = document.createElement("h1");
+    h1.textContent = member.name;
+    var p1 = document.createElement("p");
+    p1.textContent = member.profession;
+    var p2 = document.createElement("p");
+    p2.textContent = member.description;
+    p2.style.margin = '10px'
+    // Append elements to flip card
+    //flipCardFront.appendChild(imgAvatar);
+    flipCardBack.appendChild(h1);
+    flipCardBack.appendChild(p1);
+    flipCardBack.appendChild(p2);
+    flipCardInner.appendChild(flipCardFront);
+    flipCardInner.appendChild(flipCardBack);
+    flipCard.appendChild(flipCardInner);
+    // Append flip card to container
+    container2.appendChild(flipCard);
+});
+
+
+</script>
+{% endblock content %}
