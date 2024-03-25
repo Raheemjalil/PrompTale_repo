@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div id="close_update" class="update_container">
+    <div class="update_form_container">
+        <div class="side_panel">
+            <h1>Update Profile</h1>
+        </div>
+        <div class="main_panel">
+            <form id="update_form" action="update_record/{{ request.user.username }}" method="post"> {% csrf_token %}
+            <p>Username:</p>
+            <input onfocus="changeTextColor()" class="inputFields" id="username" name="username" value="{{ request.user.username }}" autocomplete="off">
+            <p>Email:</p>
+            <input onfocus="changeTextColor()" class="inputFields" id="email" name="email" value="{{ request.user.email }}" autocomplete="off">
+            <p>Old Password:</p>
+            <input onfocus="changeTextColor()" class="inputFields" name="pass" autocomplete="off">
+            <p>New Password:</p>
+            <input onfocus="changeTextColor()" class="inputFields" name="pass" autocomplete="off">
+    
+            {% for message in messages %}
+            <p id="errors">{{ message }}</p>
+            {% endfor %}
+            </form>
+            <div class="main_panel_btn_container">
+                <input class="btn" id="save_btn" type="submit" value="Save">
+                <input class="btn" id="back_btn" type="submit" value="back">
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    @keyframes giggle {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(5px);
+        }
+    }
+    .update_container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(6px); /* Add blur effect */
+        display: flex;
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        z-index: 5;
+    }
+    .update_form_container {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        width: 800px;
+        height: 500px;
+        background-color: white;
+        box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.5);
+        border-radius: 20px;
+        opacity: 0;
+        transform: scale(0.9); /* The div will start at half its size */
+        transition: visibility 0s 0.5s, opacity 0.5s linear, transform 0.3s ease-out;
+
+    }
+    .inputFields {
+        width: 50%;
+        min-width: 250px;
+        height: 15px;
+        border: none;
+        outline: none;
+        padding: 5px;
+        color: white;
+        background-color: transparent;
+        font-size: 15px;
+    }
+    .inputFields:focus {
+        background-color: rgb(2, 131, 148);
+        color: white;
+    }
+    .side_panel {
+        grid-column: 1;
+        background-color: black;
+        border: none;
+        border-radius: 20px 0px 0px 20px;
+    }
+    .main_panel {
+        grid-column: 2;
+        padding: 40px;
+        background-color: rgb(0, 96, 109);
+        border-radius: 0px 20px 20px 0px;
+        display: grid;
+        grid-template-rows: 90% 10%;
+        grid-template-columns: 100%;
+
+    }
+    .main_panel form {
+        grid-row: 1;
+    }
+    .side_panel h1 {
+        text-align: center;
+        color: white;
+    }
+    .main_panel p {
+        color: white;
+        font-size: 20px;
+    }
+    .btn {
+        width: 100px;
+        height: 40px;
+        float: right;
+        margin-right: 10px;
+    }
+    .main_panel_btn_container {
+        grid-row: 2;
+        grid-column: 1;
+    }
+    .visible {
+        opacity: 1;
+        transition-delay: 0s;
+        transform: scale(1); /* to add popup effect to profile drop down */
+    }
+    .giggle-effect {
+        display: inline-block;
+        animation: giggle 0.1s 5 alternate;
+    }
+</style>
+<script>
+    // Run some things on window load
+    window.onload = function() {
+        document.querySelector('.update_form_container').classList.add('visible');
+        var errors = document.getElementById("errors").innerText;
+        errors = errors.split(" ");
+        
+        for (var i = 0; i < errors.length; i++) {
+            (function(index) {
+                var errorParts = errors[index].split("/");
+                var element = document.getElementById(errorParts[0]);
+                element.style.color = "red";
+                element.value = 'already exists';
+                element.classList.add('giggle-effect');
+                setTimeout(function() {
+                    element.value = errorParts[1];
+                    element.style.color = "white";
+                }, 1000 * (index + 1)); // Adjust the delay as needed
+            })(i);
+        }
+    };
+
+    // Function to redirect to a specific URL
+    function redirectToURL() {
+        document.querySelector('.update_form_container').classList.remove('visible');
+
+        // Wait for 500 milliseconds (1 second) before redirecting
+        setTimeout(function() {
+            window.location.href = "http://127.0.0.1:8000/"; // Replace with your desired URL
+        }, 600);
+    }
+
+    // change field color (this is when user re-enters input after error)
+    function changeTextColor() {
+        var username = document.getElementById("username");
+        username.style.color = 'white'; // Change text color to blue when focused
+    }
+
+    // Add click event listener to the button
+    document.getElementById('close_update').addEventListener('click', redirectToURL);
+    // Stop propagation of click event on the nested div
+    document.querySelector('.update_form_container').addEventListener('click', function(event) {
+        event.stopPropagation(); // Prevent event from propagating to parent
+    });
+    
+    // function for save_btn
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get reference to the button and form
+        var submitButton = document.getElementById('save_btn');
+        var form = document.getElementById('update_form');
+        
+        // Add click event listener to the button
+        submitButton.addEventListener('click', function() {
+            // syncing the submission with redirection
+            redirectToURL();
+            setTimeout(function() {
+                form.submit();
+            }, 600);
+        });
+    });
+
+</script>
+
+{% endblock content %}

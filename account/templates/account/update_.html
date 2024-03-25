@@ -1,0 +1,96 @@
+<div id="update_form_container">
+    <div class="side_panel">
+        <h1>Update Profile</h1>
+    </div>
+    <div class="main_panel">
+        <form action="update_record/{{ request.user.username }}" method="post"> {% csrf_token %}
+        <p>Username:</p>
+        <input class="inputFields" name="first" value="{{ request.user.username }}">
+        <p>Email:</p>
+        <input class="inputFields" name="last" value="{{ request.user.email }}">
+        <p>Password:</p>
+        <input class="inputFields" name="last" value="{{ request.user.password }}">
+
+        {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+
+        <input class="btn" id="submit_btn" type="submit" value="Save">
+        <input class="btn" id="back_btn" type="submit" value="back">
+        </form>
+    </div>
+</div>
+
+<style>
+
+    body {
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    #update_form_container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 30% 70%;
+        transform: scale(0.8); /* The div will start at half its size */
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px 10px rgba(0,0,0,0.5);
+    }
+    .inputFields {
+        width: 50%;
+        min-width: 300px;
+        height: 40px;
+        border: none;
+        border-bottom: 1px solid white;
+        outline: none;
+        background-color: rgb(2, 131, 148);
+        padding: 10px;
+        color: white;
+        font-size: 20px;
+    }
+    .side_panel {
+        grid-column: 1;
+        background-color: black;
+        border: none;
+        border-radius: 10px 0px 0px 10px;
+    }
+    .main_panel {
+        grid-column: 2;
+        padding: 40px;
+        background-color: rgb(0, 96, 109);
+        border-radius: 0px 10px 10px 0px;
+    }
+    .side_panel h1 {
+        color: white;
+    }
+    .main_panel p {
+        color: white;
+        font-size: 20px;
+    }
+    .btn {
+        width: 100px;
+        height: 40px;
+        float: right;
+        margin-right: 40px;
+        margin-top: 100px;
+    }
+    .transition-effect {
+        transition: visibility 0s 0.5s, opacity 0.5s linear, transform 0.3s ease-out;
+    }
+
+</style>
+
+<script>
+    // Get the referrer URL
+    const referrerUrl = document.referrer;
+
+    // Define the specific referrer URL from which the transition effect should occur
+    const specificReferrerUrl = 'http://127.0.0.1:8000/';
+
+    // Check if the referrer URL matches the specific referrer URL
+    if (referrerUrl === specificReferrerUrl) {
+        // Add a class to trigger the transition effect
+        document.getElementById('update_form_container').classList.add('transition-effect');
+    }
+
+</script>
