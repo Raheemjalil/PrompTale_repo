@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <title>PromptTale</title>
+    </head>
+    <body>
+        <div class="top_nav">
+            <a class="top_nav_btn" href="{% url 'home' %}">Home</a>
+            <a class="top_nav_btn">About</a>
+            {% if request.user.is_authenticated %}
+            <a class="top_nav_btn" href="{% url 'stories' %}">Stories</a>
+            <div class="user_name_sec">
+                <p>Hello, {{request.user.username}}</p>
+            </div>
+            <div class="profile_sec">
+                {% if request.user.profile_picture %}
+                <img class="profile" src="{{ request.user.profile_picture.url }}" alt="Profile Picture">
+                {% else %}
+                <img class="profile" src="{% static 'default_profile.png' %}" alt="Profile Picture">
+                {% endif %}
+                <div class="profile_dropdown">
+                    <img class="dropdown_close_btn" src="{% static 'dropdown_close_btn.png' %}" alt="Profile Picture">
+                    <div class="profile_dropdown_top">  
+                        {% if request.user.profile_picture %}
+                        <img class="dropdown_profile" src="{{ request.user.profile_picture.url }}" alt="Profile Picture">
+                        {% else %}
+                        <img class="dropdown_profile" src="{% static 'default_profile.png' %}" alt="Profile Picture">
+                        {% endif %}
+                        <p class="dropdown_text">{{request.user.email}}</p>
+                        <div class="user_rating">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star-half-o checked"></span>
+                        </div>
+                    </div>
+                    <div class="profile_dropdown_middle">
+                        <p>Stories: 45</p>
+                    </div>
+                    <div class="profile_dropdown_bottom">
+                        <a class="dropdown_btn" href="{% url 'update' %}"><i class="fa fa-pencil"></i>Edit Profile</a>
+                        <a class="dropdown_btn" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Log out</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <a class="top_nav_btn" href="{% url 'register' %}">Sign up</a>
+            <a id="login_btn" class="top_nav_btn" class="profile_sec" href="{% url 'login' %}">Log in</a>
+            {% endif %}
+        </div>
+        {% block content %}
+
+        {% endblock content %}
+        <!--{% include 'personal/snippets/body_snippets.html' %}-->
+    </body>
+    <!--<footer>
+        <h1>This is the footer</h1>
+    </footer>-->
+</html>
+<style>
+
+body {
+    margin: 0;
+}
+.top_nav {
+    position: fixed;
+    top: 0;
+    display: grid;
+    grid-template-columns: 100px 100px 100px auto 100px;
+    width: 100%;
+    height: 60px;
+    background-color: rgb(0, 0, 0);
+    z-index: 4;
+}
+#login_btn {
+    grid-column: 5;
+}
+.top_nav_btn {
+    position: relative;
+    display: block;
+    color: white;
+    margin: 20px;
+    padding: 0;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+.profile_dropdown {
+    visibility: hidden;
+    display: grid;
+    position: absolute;
+    border-radius: 20px;
+    grid-template-rows: 250px 50px 100px;
+    background-color: rgb(0, 0, 0);
+    width: 300px;
+    height: 400px;
+    right: 10px;
+    top: 70px;
+    opacity: 0;
+    transform: scale(0.9); /* The div will start at half its size */
+    transition: visibility 0s 0.5s, opacity 0.5s linear, transform 0.3s ease-out;
+}
+
+/* top section of profile dropdown menu */
+.profile_dropdown_top {
+    grid-row: 1;
+    display: block;
+    border-radius: 20px 20px 0px 0px;
+    background-color: rgb(0, 96, 109);
+    padding-top: 30px;
+    text-align: center;
+}
+.dropdown_profile {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    border: 2px solid black;
+}
+.dropdown_text {
+    color: white;
+    font-size: 20px;
+    margin: 10px;
+}
+.dropdown_close_btn {
+    position: absolute;
+    display: none;
+    width: 20px;
+    height: 20px;
+    margin: 20px;
+    right: 0;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: white;
+}
+.user_rating {
+    padding: 10px;
+}
+.checked {
+    color: orange;
+    font-size: 20px;
+}
+
+/* middle section of profile drop down menu */
+.profile_dropdown_middle {
+    grid-row: 2;
+    border-bottom: 1px solid white;
+    background-color: rgb(0, 96, 109);
+}
+.profile_dropdown_middle p {
+    color: white;
+    font-size: 18px;
+    margin: 10px;
+}
+
+/* bottom section of profile drop down menu */
+.profile_dropdown_bottom {
+    grid-row: 3;
+    display: block;
+    padding-top: 10px;
+    text-align: left;
+}
+.dropdown_btn {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: white;
+}
+.dropdown_btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.dropdown_btn i {
+    margin: 0px 10px 0px 10px;
+}
+/* top navigation bar */
+.top_nav .user_name_sec {
+    grid-column: 4;
+}
+.top_nav .user_name_sec p {
+    position: relative;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    margin: 20px;
+    font-size: 17px;
+    float: right;
+}
+.top_nav .profile_sec {
+    grid-column: 5;
+}
+.top_nav .profile_sec .profile {
+    position: relative;
+    float: right;
+    margin: 10px;
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+/* classes for changing properties */
+.visible {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+    transform: scale(1); /* to add popup effect to profile drop down */
+}
+
+/* for responsize web page */
+@media screen and (max-width: 550px) {
+    body {
+        margin-top: 60px;
+    }
+    .top_nav {
+        position: fixed;
+        top: 0;
+        display: grid;
+        grid-template-columns: 0px 0px 0px auto 100px;
+    }
+    .user_name_sec {
+        grid-column: 1;
+    }
+    .top_nav .user_name_sec p {
+        float: left;
+    }
+    .top_nav_btn {
+        display: none;
+    }
+    .profile_dropdown {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        right: 0;
+        top: 0;
+        border-radius: 0;
+        grid-template-rows: 60% 20% 20%;
+
+    }
+    .profile_dropdown_top {
+        border-radius: 0;
+    }
+    .dropdown_close_btn {
+        display: block;
+    }
+}
+</style>
+
+
+<script>
+
+document.querySelector('.profile').addEventListener('click', function(event) {
+    event.stopPropagation(); // Prevent the click event from bubbling up
+
+    document.querySelector('.profile_dropdown').classList.add('visible');
+});
+
+document.addEventListener('click', function(event) {
+    const profileDropdown = document.querySelector('.profile_dropdown');
+
+    if (!event.target.closest('.profile') && !event.target.closest('.profile_dropdown')) {
+        profileDropdown.classList.remove('visible');
+    }
+
+});
+
+/* clossing the dropdown menu with close btn in phone view*/
+document.querySelector('.dropdown_close_btn').addEventListener('click', function(event) {
+    event.stopPropagation(); // Prevent the click event from bubbling up
+
+    document.querySelector('.profile_dropdown').classList.remove('visible');
+});
+
+</script>
